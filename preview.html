@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matriks Fakultas Ilmu Budaya</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--ink:#1c1f24;--ink2:#5d626b;--dot:#EA3829;--grid:#8a8d93;--band:#f2f3f5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15171b;--ink:#ecece8;--ink2:#a5a8ae;--dot:#EA3829;--grid:#6a6d73;--band:#1e2126}}
+:root[data-theme="dark"]{--bg:#15171b;--ink:#ecece8;--ink2:#a5a8ae;--dot:#EA3829;--grid:#6a6d73;--band:#1e2126}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 Jost,"Helvetica Neue",Arial,sans-serif}
+header,.wrap{max-width:1100px;margin:auto;padding:20px 24px 0}
+h1{font-weight:500;font-size:26px;margin:0}
+.sub{color:var(--ink2);margin:2px 0 8px}
+.wrap{padding-bottom:32px}
+.board{overflow-x:auto}
+svg{display:block;min-width:940px;width:100%;height:auto}
+.t{fill:var(--ink);font-size:13px}.g{fill:var(--ink2);font-size:12.5px}
+.gl{stroke:var(--grid);stroke-width:.8}
+.dot{fill:var(--dot)}
+.cell{fill:transparent}
+</style>
+</head>
+<body>
+<header>
+<h1>Matriks Fakultas Ilmu Budaya</h1>
+</header>
+<div class="wrap"><div class="board"><svg id="sv" role="img"><title>Matriks hubungan antarruang FIB</title><desc>Matriks persegi 31 kali 31 ruang. Lingkaran abu-abu pada titik potong menandai hubungan erat, sedang, atau tidak langsung.</desc></svg></div></div>
+<script>
+const G=['Penerima/dan publik','Akademik/Sastra Korea','Akademik/Pariwisata','Dekanat dan/administrasi','Dosen dan layanan/mahasiswa','Fasilitas/penunjang','Servis dan/utilitas'];
+const R=`lob|Lobi utama|0
+aud|Auditorium Amphiteater|0
+ptp|Pelayanan terpadu|0
+ksk|Kelas Sas-Kor|1
+lbh|Lab bahasa|1
+sbd|Studio budaya|1
+lkm|Lab komputer|1
+kpw|Kelas Pariwisata|2
+ltr|Lab travel|2
+ltg|Lab tour guiding|2
+lmc|Lab MICE|2
+sft|Studio fotografi|2
+dek|Dekan dan wadek|3
+rpt|Ruang rapat|3
+stf|Ruang staf|3
+hrd|HRD|3
+ars|Arsip|3
+dos|Ruang dosen|4
+lgd|Lounge dosen|4
+bk|Konseling (BK)|4
+org|BEM/HIMA/UKM|4
+lib|Perpustakaan|5
+knt|Kantin|5
+slg|Student lounge|5
+kln|Klinik|5
+kop|Koperasi|5
+tlt|Toilet|6
+msl|Mushola|6
+jan|Janitor|6
+gdg|Gudang|6
+mep|Ruang MEP|6`.split('\n').map(l=>{const[id,n,g]=l.split('|');return{id,n,g:+g}});
+const V={};`lob ptp 3
+lob aud 3
+lob knt 2
+lob stf 2
+lob tlt 2
+lob msl 2
+lob lib 1
+lob kln 1
+lob kop 1
+lob dek 1
+lob ksk 1
+lob kpw 1
+lob slg 1
+aud tlt 3
+aud slg 2
+aud sbd 2
+aud lmc 2
+aud mep 2
+aud gdg 2
+aud msl 2
+aud org 1
+aud kop 1
+aud knt 1
+ptp stf 3
+ptp ars 2
+ptp hrd 1
+ptp dek 1
+ptp mep 1
+ksk lbh 3
+lbh lkm 3
+ksk sbd 2
+ksk lkm 2
+ksk dos 2
+ksk lib 2
+ksk tlt 2
+ksk gdg 2
+ksk kpw 1
+ksk slg 1
+ksk jan 1
+lbh sbd 1
+lbh lib 2
+lbh mep 1
+lkm lib 2
+lkm mep 2
+lkm ltr 1
+sbd gdg 1
+kpw ltr 3
+ltr ltg 3
+ltg lmc 2
+kpw ltg 2
+sft lmc 3
+sft ltg 2
+kpw lmc 1
+kpw dos 2
+kpw lib 1
+kpw tlt 2
+kpw gdg 2
+kpw slg 1
+kpw jan 1
+dek rpt 3
+dek stf 2
+rpt stf 2
+stf hrd 3
+stf ars 3
+hrd ars 2
+dek hrd 2
+dek ars 1
+dek dos 1
+stf dos 1
+dos lgd 3
+dos bk 2
+dos tlt 2
+bk kln 2
+bk org 1
+bk lgd 1
+lgd knt 1
+org slg 2
+org knt 1
+org kop 1
+org tlt 2
+lib slg 2
+lib knt 1
+lib tlt 2
+lib gdg 1
+knt slg 1
+knt kop 2
+knt tlt 3
+knt msl 2
+knt gdg 2
+knt mep 1
+knt jan 1
+kln kop 1
+kln slg 1
+kln tlt 1
+slg kop 1
+tlt msl 3
+tlt jan 3
+jan gdg 2
+gdg mep 1`.split('\n').forEach(l=>{const[a,b,v]=l.split(' ');V[a+b]=V[b+a]=+v});
+const n=R.length,C=24,LW=270,TH=150,W=LW+n*C+20,H=TH+n*C+20,RD=[0,4.5,7.5,10.5],TT=['','tidak langsung atau visual','sedang, akses mudah','sangat erat, wajib bersebelahan'];
+const cx=i=>LW+i*C+C/2,cy=i=>TH+i*C+C/2;
+const sv=document.getElementById('sv');sv.setAttribute('viewBox',`0 0 ${W} ${H}`);
+let h='';
+let i0=0;G.forEach((g,gi)=>{const c=R.filter(r=>r.g===gi).length;if(gi%2===0)h+=`<rect x="${LW}" y="${TH+i0*C}" width="${n*C}" height="${c*C}" fill="var(--band)"/><rect x="${LW+i0*C}" y="${TH}" width="${c*C}" height="${n*C}" fill="var(--band)"/>`;
+const ls=g.split('/');ls.forEach((s,k)=>h+=`<text class="g" x="8" y="${TH+i0*C+C/2+k*15+4}">${s}</text>`);i0+=c});
+h+=`<rect id="hr" x="0" y="0" width="${W}" height="${C}" fill="var(--ink)" opacity="0" pointer-events="none"/><rect id="hc" x="0" y="0" width="${C}" height="${H}" fill="var(--ink)" opacity="0" pointer-events="none"/>`;
+R.forEach((r,i)=>{h+=`<line class="gl" x1="${LW-6}" y1="${cy(i)}" x2="${LW+n*C}" y2="${cy(i)}"/><line class="gl" x1="${cx(i)}" y1="${TH-6}" x2="${cx(i)}" y2="${TH+n*C}"/><text class="t" x="${LW-14}" y="${cy(i)+4.5}" text-anchor="end">${r.n}</text><text class="t" transform="translate(${cx(i)+4.5} ${TH-14}) rotate(-90)">${r.n}</text>`});
+R.forEach((a,i)=>R.forEach((b,j)=>{if(i===j){h+=`<circle cx="${cx(i)}" cy="${cy(i)}" r="2" fill="var(--grid)"/>`;return}const v=V[a.id+b.id]||0;
+h+=`<g class="cell-g" data-i="${i}" data-j="${j}">${v?`<circle class="dot" cx="${cx(j)}" cy="${cy(i)}" r="${RD[v]}"/>`:''}<rect class="cell" x="${LW+j*C}" y="${TH+i*C}" width="${C}" height="${C}"><title>${a.n} dan ${b.n}: ${v?TT[v]:'tidak ada hubungan khusus'}</title></rect></g>`}));
+[1,2,3].forEach((v,q)=>{h+=`<circle class="dot" cx="${24+q*30}" cy="30" r="${RD[v]}"/>`});
+sv.insertAdjacentHTML('beforeend',h);
+const hr=sv.querySelector('#hr'),hc=sv.querySelector('#hc');
+sv.querySelectorAll('.cell-g').forEach(g=>{g.addEventListener('mouseenter',()=>{hr.setAttribute('y',TH+g.dataset.i*C);hc.setAttribute('x',LW+g.dataset.j*C);hr.setAttribute('opacity',.08);hc.setAttribute('opacity',.08)});g.addEventListener('mouseleave',()=>{hr.setAttribute('opacity',0);hc.setAttribute('opacity',0)})});
+</script>
+</body>
+</html>
